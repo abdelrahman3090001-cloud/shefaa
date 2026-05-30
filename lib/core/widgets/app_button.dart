@@ -30,9 +30,7 @@ class AppButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(44.r),
           color: backgroundColor ?? AppColors.mainGreen,
           border: Border.all(
-            color: backgroundColor == Colors.white
-                ? AppColors.mainGreen
-                : AppColors.mainGreen,
+            color: AppColors.mainGreen,
           ),
         ),
         child: Text(
@@ -40,7 +38,7 @@ class AppButton extends StatelessWidget {
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.bold,
-            color: backgroundColor == Colors.white ? AppColors.mainGreen : Colors.white,
+            color: backgroundColor == AppColors.white ? AppColors.mainGreen : AppColors.white,
           ),
         ),
       ),

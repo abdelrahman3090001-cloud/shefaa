@@ -1,28 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shefaa/core/routes/routes.dart';
 import '../../../../core/theming/app_colors.dart';
+import '../../../../core/widgets/custom-text_form_field.dart';
+import '../../data/models/facility_model.dart';
 
 // 1. GPS Header
 class GpsHeader extends StatelessWidget {
-  const GpsHeader({super.key});
+  final List<FacilityModel>? facilities;
+  const GpsHeader({super.key, this.facilities});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 50.h, left: 20.w, right: 20.w, bottom: 20.h),
-      decoration: BoxDecoration(
-        color: AppColors.mainGreen,
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(30.r)),
+      width: double.infinity,
+      height: 110.h,
+      padding: EdgeInsets.only(top: 40.h, left: 20.w, right: 20.w),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            AppColors.NpGreen,
+            AppColors.mainGreen,
+          ],
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(width: 30), // للتوسيط
+          const SizedBox(width: 30), 
           Text(
             'Find Medical Services',
-            style: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: AppColors.white,
+              fontSize: 20.sp,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          Icon(Icons.bookmark_outline, color: Colors.white, size: 28.r),
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(
+                context, 
+                Routes.bookmarkedServicesScreen,
+                arguments: facilities ?? <FacilityModel>[],
+              );
+            },
+            child: Icon(Icons.bookmark_outline, color: AppColors.white, size: 26.r),
+          ),
         ],
       ),
     );
@@ -36,30 +61,16 @@ class GpsSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: 'Search facilities..',
-          hintStyle: TextStyle(color: Colors.grey, fontSize: 14.sp),
-          prefixIcon: const Icon(Icons.search, color: Colors.grey),
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: EdgeInsets.symmetric(vertical: 12.h),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30.r),
-            borderSide: BorderSide(color: Colors.grey.shade300),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30.r),
-            borderSide: const BorderSide(color: AppColors.mainGreen),
-          ),
-        ),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+      child: const CustomTextFormField(
+        hintText: 'Search facilities..',
+        suffixIcon: Icon(Icons.search, color: AppColors.gray),
       ),
     );
   }
 }
 
-// 3. Gps Categories (Toggle)
+// 3. Gps Categories
 class GpsCategories extends StatefulWidget {
   const GpsCategories({super.key});
 
@@ -69,10 +80,12 @@ class GpsCategories extends StatefulWidget {
 
 class _GpsCategoriesState extends State<GpsCategories> {
   int selectedIndex = 0;
-  final List<Map<String, dynamic>> categories = [
-    {'name': 'Hospital', 'icon': Icons.local_hospital_outlined},
-    {'name': 'Pharmacy', 'icon': Icons.local_pharmacy_outlined},
-    {'name': 'Laboratory', 'icon': Icons.biotech_outlined},
+
+  final List<Map<String, String>> categories = [
+    {'name': 'Hospital', 'iconPath': 'assets/images/hospital-01.png'},
+    {'name': 'Pharmacy', 'iconPath': 'assets/images/Vector.png'},
+    {'name': 'Laboratory', 'iconPath': 'assets/images/assay.png'},
+    {'name': 'Clinic', 'iconPath': 'assets/images/44444 Icon.png'},
   ];
 
   @override
@@ -86,24 +99,32 @@ class _GpsCategoriesState extends State<GpsCategories> {
           return GestureDetector(
             onTap: () => setState(() => selectedIndex = index),
             child: Container(
-              margin: EdgeInsets.only(right: 12.w),
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              margin: EdgeInsets.only(right: 10.w),
+              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: isSelected ? const Color(0xFF133B2C) : Colors.white,
+                color: isSelected ? AppColors.deepGreen : AppColors.white,
                 borderRadius: BorderRadius.circular(20.r),
-                border: Border.all(color: isSelected ? Colors.transparent : Colors.grey.shade300),
+                border: Border.all(color: isSelected ? Colors.transparent : AppColors.grayShade300),
               ),
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(categories[index]['icon'], 
-                    color: isSelected ? Colors.white : Colors.grey, size: 18.r),
+                  Image.asset(
+                    categories[index]['iconPath']!,
+                    color: isSelected ? AppColors.white : AppColors.gray,
+                    colorBlendMode: BlendMode.srcIn,
+                    width: 15.r,
+                    height: 15.r,
+                    errorBuilder: (context, error, stackTrace) => 
+                      Icon(Icons.category_outlined, size: 15.r, color: isSelected ? AppColors.white : AppColors.gray),
+                  ),
                   SizedBox(width: 8.w),
                   Text(
-                    categories[index]['name'],
+                    categories[index]['name']!,
                     style: TextStyle(
-                      color: isSelected ? Colors.white : Colors.grey,
+                      color: isSelected ? AppColors.white : AppColors.gray,
                       fontWeight: FontWeight.bold,
-                      fontSize: 13.sp,
+                      fontSize: 12.sp,
                     ),
                   ),
                 ],
@@ -116,7 +137,7 @@ class _GpsCategoriesState extends State<GpsCategories> {
   }
 }
 
-// 4. Map Placeholder
+// 4. Map View
 class GpsMapView extends StatelessWidget {
   const GpsMapView({super.key});
 
@@ -124,20 +145,22 @@ class GpsMapView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(20.r),
-      height: 200.h,
+      height: 160.h,
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.r),
-        image: const DecorationImage(
-          image: AssetImage('assets/images/splash.png'), // محاكاة للخريطة حالياً
-          fit: BoxFit.cover,
-          opacity: 0.3,
-        ),
-        color: Colors.grey.shade100,
-        border: Border.all(color: Colors.grey.shade200),
+        color: AppColors.lightGreen,
+        border: Border.all(color: AppColors.grayShade300),
       ),
-      child: Center(
-        child: Icon(Icons.location_on, color: Colors.red, size: 40.r),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(25.r),
+        child: Stack(
+          children: [
+            Center(
+              child: Icon(Icons.location_on, color: AppColors.error, size: 40.r),
+            ),
+          ],
+        ),
       ),
     );
   }

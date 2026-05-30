@@ -14,8 +14,17 @@ import 'package:flutter/widgets.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/pill.png
+  AssetGenImage get pill => const AssetGenImage('assets/images/pill.png');
+
+  /// File path: assets/images/Bell.png
+  AssetGenImage get bell => const AssetGenImage('assets/images/Bell.png');
+
   /// File path: assets/images/Doctor.png
   AssetGenImage get doctor => const AssetGenImage('assets/images/Doctor.png');
+
+  /// File path: assets/images/Maps4.png
+  AssetGenImage get maps4 => const AssetGenImage('assets/images/Maps4.png');
 
   /// File path: assets/images/User-4.png
   AssetGenImage get user4 => const AssetGenImage('assets/images/User-4.png');
@@ -32,7 +41,10 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+    pill,
+    bell,
     doctor,
+    maps4,
     user4,
     users4,
     splash,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theming/app_colors.dart';
-import '../data/models/doctor_model.dart';
+import '../../data/models/doctor_model.dart';
 
 class DoctorCard extends StatelessWidget {
   final DoctorModel doctor;

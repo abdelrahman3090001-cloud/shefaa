@@ -14,7 +14,7 @@ class PrescriptionCubit extends Cubit<PrescriptionState> {
         dosage: '2 Pills',
         instruction: 'After Eating',
         days: ['Sun', 'Tue', 'Thu'],
-        currentDay: 10,
+        currentDay: 15,
         totalDays: 60,
         times: ['9:00 PM', '10:00 AM'],
       ),
@@ -29,6 +29,14 @@ class PrescriptionCubit extends Cubit<PrescriptionState> {
       ),
     ];
     emit(PrescriptionSuccess(prescriptions));
+  }
+
+  void addPrescription(PrescriptionModel prescription) {
+    if (state is PrescriptionSuccess) {
+      final currentList = List<PrescriptionModel>.from((state as PrescriptionSuccess).prescriptions);
+      currentList.add(prescription);
+      emit(PrescriptionSuccess(currentList));
+    }
   }
 
   void deletePrescription(int index) {

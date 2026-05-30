@@ -32,11 +32,11 @@ class AppointmentCard extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 20.w),
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: AppColors.black.withValues(alpha: 0.04),
               blurRadius: 15,
               offset: const Offset(0, 8),
             )
@@ -47,15 +47,15 @@ class AppointmentCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
               decoration: BoxDecoration(
-                color: const Color(0xFF133B2C),
+                color: AppColors.deepGreen,
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Column(
                 children: [
-                  Text(month, style: TextStyle(color: Colors.white, fontSize: 13.sp)),
+                  Text(month, style: TextStyle(color: AppColors.white, fontSize: 13.sp)),
                   Text(date,
                       style: TextStyle(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontSize: 18.sp,
                           fontWeight: FontWeight.bold)),
                 ],
@@ -72,14 +72,14 @@ class AppointmentCard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           color: AppColors.mainGreen)),
                   Text('($specialization)',
-                      style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
+                      style: TextStyle(fontSize: 12.sp, color: AppColors.gray)),
                   SizedBox(height: 5.h),
                   Row(
                     children: [
-                      Icon(Icons.location_on, size: 12.r, color: Colors.grey),
+                      Icon(Icons.location_on, size: 12.r, color: AppColors.gray),
                       SizedBox(width: 4.w),
                       Text(location,
-                          style: TextStyle(fontSize: 11.sp, color: Colors.grey)),
+                          style: TextStyle(fontSize: 11.sp, color: AppColors.gray)),
                     ],
                   ),
                 ],
@@ -90,7 +90,7 @@ class AppointmentCard extends StatelessWidget {
               children: [
                 Text(time,
                     style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
-                Text(day, style: TextStyle(fontSize: 11.sp, color: Colors.grey)),
+                Text(day, style: TextStyle(fontSize: 11.sp, color: AppColors.gray)),
               ],
             ),
           ],

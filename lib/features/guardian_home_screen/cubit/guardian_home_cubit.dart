@@ -7,25 +7,10 @@ class GuardianHomeCubit extends Cubit<GuardianHomeState> {
   void getGuardianHomeData() async {
     emit(const GuardianHomeLoading());
     
-    // محاكاة تحميل بيانات الشخص المراقب (Sara Ahmed)
-    await Future.delayed(const Duration(seconds: 1));
+    // محاكاة وقت التحميل فقط
+    await Future.delayed(const Duration(milliseconds: 500));
     
-    final appointments = [
-      {
-        'doctor': 'Doctor Mohamed Refaat',
-        'specialization': 'Orthopedic',
-        'location': 'Future Life Clinics',
-        'time': '7:45 PM',
-        'day': 'Thursday',
-        'date': '23',
-        'month': 'Nov',
-        'status': 'Confirmed'
-      }
-    ];
-
-    emit(GuardianHomeSuccess(
-      appointments: appointments,
-      locationData: {'name': 'Sara Ahmed', 'lastSeen': 'Live 2m ago'},
-    ));
+    // كـ Software Engineer: تم نقل البيانات لصفحة الـ UI مباشرة لتكون أمام عينك وسهلة التعديل
+    emit(const GuardianHomeSuccess()); 
   }
 }

@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.10.4
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -14,23 +14,22 @@ dependencies:
   flutter_screenutil: ^5.9.3
   easy_localization: ^3.0.8
   flutter_gen: ^5.12.0
-  # كـ Software Engineer، أضفت هذه المكتبات لضبط الـ State Management والـ API
   flutter_bloc: ^8.1.6
   dio: ^5.4.3+1
   get_it: ^7.6.7
   json_annotation: ^4.9.0
-  retrofit: ^4.1.0
+  retrofit: ^4.5.0
   freezed_annotation: ^2.4.1
+  video_player: ^2.8.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.4.9
-  flutter_gen_runner: ^5.12.0
-  flutter_native_splash: ^2.4.7
+  flutter_gen_runner: ^5.4.0
   json_serializable: ^6.8.0
   retrofit_generator: ^9.1.7
-  flutter_lints: ^6.0.0
+  flutter_lints: ^3.0.0
   freezed: ^2.4.7
 
 flutter:
@@ -38,3 +37,9 @@ flutter:
   assets:
     - assets/images/
     - assets/translations/
+    - assets/videos/
+    - assets/images/Vector.png
+    - assets/images/assay.png
+    - assets/images/hospital-01.png
+    - assets/videos/Video39.mp4
+    - assets/images/44444 Icon.png

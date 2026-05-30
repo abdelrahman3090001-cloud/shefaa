@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../data/models/facility_model.dart';
 
 @immutable
 abstract class GpsState {
@@ -14,7 +15,7 @@ class GpsLoading extends GpsState {
 }
 
 class GpsSuccess extends GpsState {
-  final List<dynamic> facilities;
+  final List<FacilityModel> facilities;
   const GpsSuccess({required this.facilities});
 }
 

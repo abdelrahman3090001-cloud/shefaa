@@ -1,38 +1,37 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../data/repos/profil2_repo.dart';
 import 'profil2_state.dart';
-import '../data/models/user_profile_model.dart';
 
 class Profil2Cubit extends Cubit<Profil2State> {
-  Profil2Cubit() : super(Profil2Initial());
+  final Profil2Repo _profil2repo;
+  Profil2Cubit(this._profil2repo) : super(Profil2Initial());
 
-  void getUserProfile() {
+  void getUserProfile() async {
     emit(Profil2Loading());
-    // محاكاة جلب البيانات
-    Future.delayed(const Duration(seconds: 1), () {
-      final user = UserProfileModel(
-        firstName: 'Ahmed',
-        lastName: 'Mostafa',
-        phoneNumber: '+20 01012345678',
-        email: 'Ahmed.Mostafa@email.com',
-        gender: 'Male',
-      );
+    try {
+      final user = await _profil2repo.getUserProfile();
       emit(Profil2Success(user));
-    });
+    } catch (e) {
+      emit(Profil2Error(e.toString()));
+    }
   }
 
-  void changePassword({required String oldPassword, required String newPassword}) {
+  void changePassword({required String oldPassword, required String newPassword}) async {
     emit(ChangePasswordLoading());
-    // محاكاة تغيير كلمة المرور
-    Future.delayed(const Duration(seconds: 2), () {
-      if (newPassword.length >= 8) {
-        emit(ChangePasswordSuccess());
-      } else {
-        emit(ChangePasswordError('Password must be at least 8 characters long.'));
-      }
-    });
+    try {
+      await _profil2repo.changePassword(oldPassword, newPassword);
+      emit(ChangePasswordSuccess());
+    } catch (e) {
+      emit(ChangePasswordError(e.toString()));
+    }
   }
 
-  void deleteAccount() {
-    // منطق حذف الحساب
+  void deleteAccount() async {
+    try {
+      await _profil2repo.deleteAccount();
+      // هنا ممكن نضيف حالة نجاح للحذف أو ننتقل لصفحة تسجيل الدخول
+    } catch (e) {
+      // التعامل مع الخطأ
+    }
   }
 }

@@ -30,7 +30,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 child: Container(
                   height: 500.h,
                   width: double.infinity,
-                  color: AppColors.mainGreen,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.NpGreen,
+                        AppColors.mainGreen,
+                      ],
+                      end: Alignment.bottomCenter,
+                      begin: Alignment.topCenter,
+                    ),
+                  )
                 ),
               ),
               Column(
@@ -45,7 +54,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   SizedBox(
                     width: 250.w,
                     child: Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit:',
+                      'Your comprehensive companion for smarter care and a healthier lifte.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,

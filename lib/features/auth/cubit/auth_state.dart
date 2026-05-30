@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+
 @immutable
 abstract class AuthState {
   const AuthState();
@@ -13,7 +14,8 @@ class AuthLoading extends AuthState {
 }
 
 class AuthSuccess extends AuthState {
-  const AuthSuccess();
+  final String message;
+  const AuthSuccess(this.message);
 }
 
 class AuthError extends AuthState {

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../data/onboarding_model.dart';
 import 'widgets/onboarding_item.dart';
 import 'widgets/welcome_screen.dart'; // استيراد شاشة الـ Welcome
+
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -16,33 +17,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<OnboardingModel> _onboardingData = [
     OnboardingModel(
-      title: 'Patient',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit:',
+      title: 'Member',
+      description: 'Take full control of your health journey:',
       image: 'assets/images/splash.png',
       bulletPoints: [
-        'Lorem ipsum dolor sit amet.',
-        'Lorem ipsum dolor sit amet.',
-        'Lorem ipsum dolor sit amet.',
+        'Find & Book:Locate hospitals and pharmacies or book top doctors instantly.',
+        'Medical Records: Securely upload and organize all your health documents in one place.',
+        'Smart Reminders: Get automated notifications so you never miss a medication dose.',
       ],
     ),
     OnboardingModel(
-      title: 'Guardian',
-      description: 'Access medical history and manage appointments easily.',
+      title: 'Caregiver',
+      description: 'Stay connected and ensure their safety.',
       image: 'assets/images/splash.png',
       bulletPoints: [
-        'Lorem ipsum dolor sit amet.',
-        'Lorem ipsum dolor sit amet.',
-        'Lorem ipsum dolor sit amet.',
-      ],
-    ),
-    OnboardingModel(
-      title: 'Doctor',
-      description: 'Order and manage medications with just a few taps.',
-      image: 'assets/images/splash.png',
-      bulletPoints: [
-        'Lorem ipsum dolor sit amet.',
-        'Lorem ipsum dolor sit amet.',
-        'Lorem ipsum dolor sit amet.',
+        'Real-time Tracking: Monitor real-time location for constant peace of mind..',
+        'AI Safety Alerts: Receive instant alerts if our AI detects health risks.',
+        'Care Management: Seamlessly view appointments and manage prescriptions.',
       ],
     ),
   ];

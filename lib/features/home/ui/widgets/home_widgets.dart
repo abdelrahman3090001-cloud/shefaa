@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shefaa/core/routes/routes.dart';
 import '../../../../core/theming/app_colors.dart';
 import '../../../../core/widgets/app_header.dart';
+import '../../../../core/widgets/section_header.dart';
+import '../../../../core/widgets/appointment_card.dart';
+import '../../../../gen/assets.gen.dart';
+import '../../../gps/data/models/facility_model.dart';
 
 // 1. Header Widget
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({super.key});
+  final VoidCallback onProfileTap;
+  final VoidCallback onNotificationsTap;
+
+  const HomeHeader({
+    super.key,
+    required this.onProfileTap,
+    required this.onNotificationsTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,28 +25,50 @@ class HomeHeader extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            top: 50.h,
+            top: 40.h,
             left: 20.w,
             child: InkWell(
-              onTap: () {},
-              child: Icon(Icons.person_outline, color: Colors.white, size: 28.r),
+              onTap: onProfileTap,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Assets.images.user4.image(
+                    height: 40.r,
+                    width: 40.r,
+                    fit: BoxFit.contain,
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    'Ahmed',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Positioned(
-            top: 50.h,
+            top: 45.h,
             right: 20.w,
             child: InkWell(
-              onTap: () {},
-              child: Icon(Icons.notifications_none, color: Colors.white, size: 28.r),
+              onTap: onNotificationsTap,
+              child: Assets.images.bell.image(
+                height: 30.r,
+                width: 30.r,
+                fit: BoxFit.contain,
+                color: Colors.white,
+              ),
             ),
           ),
           Center(
             child: Padding(
               padding: EdgeInsets.only(top: 20.h),
-              child: Image.asset(
-                'assets/images/splash.png',
-                height: 100.h,
-                color: Colors.white,
+              child: Assets.images.splash.image(
+                height: 60.h,
+                fit: BoxFit.contain,
               ),
             ),
           ),
@@ -48,79 +82,28 @@ class HomeHeader extends StatelessWidget {
 class UpcomingAppointments extends StatelessWidget {
   final List<dynamic> appointments;
   const UpcomingAppointments({super.key, required this.appointments});
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Upcoming Appointments', 
-                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: Colors.black)),
-              InkWell(
-                onTap: () {},
-                child: Text('View All', 
-                  style: TextStyle(fontSize: 14.sp, color: Colors.grey, decoration: TextDecoration.underline)),
-              ),
-            ],
-          ),
+        SectionHeader(
+          title: 'Upcoming Appointments',
+          actionText: 'View All',
+          onActionTap: () {
+             Navigator.pushNamed(context, Routes.appointmentsScreen);
+          },
         ),
         SizedBox(height: 10.h),
         if (appointments.isNotEmpty)
-          InkWell(
+          AppointmentCard(
+            doctorName: appointments[0]['doctor'],
+            specialization: appointments[0]['specialization'],
+            location: appointments[0]['location'],
+            time: appointments[0]['time'],
+            day: appointments[0]['day'],
+            month: 'Sep',
+            date: '18',
             onTap: () {},
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.w),
-              padding: EdgeInsets.all(16.r),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16.r),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 15, offset: const Offset(0, 8))],
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
-                    decoration: BoxDecoration(color: const Color(0xFF133B2C), borderRadius: BorderRadius.circular(12.r)),
-                    child: Column(
-                      children: [
-                        Text('Sep', style: TextStyle(color: Colors.white, fontSize: 13.sp)),
-                        Text('18', style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 15.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(appointments[0]['doctor'], 
-                          style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: AppColors.mainGreen)),
-                        Text('(${appointments[0]['specialization']})', style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
-                        SizedBox(height: 5.h),
-                        Row(
-                          children: [
-                            Icon(Icons.location_on, size: 12.r, color: Colors.grey),
-                            SizedBox(width: 4.w),
-                            Text(appointments[0]['location'], style: TextStyle(fontSize: 11.sp, color: Colors.grey)),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(appointments[0]['time'], style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
-                      Text(appointments[0]['day'], style: TextStyle(fontSize: 11.sp, color: Colors.grey)),
-                    ],
-                  ),
-                ],
-              ),
-            ),
           ),
       ],
     );
@@ -130,87 +113,157 @@ class UpcomingAppointments extends StatelessWidget {
 // 3. Medical Summary Widget
 class MedicalSummary extends StatelessWidget {
   const MedicalSummary({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       child: Row(
         children: [
-          _buildCard('Recent', 'MRI Report', 'Sep 22, 2025 - PDF', Icons.description_outlined),
-          SizedBox(width: 15.w),
-          _buildCard('Prescription', 'Panadol', 'After Eating', Icons.medication_outlined, extra: '2 Pills'),
+          _buildCard('Recent', 'MRI Report', 'Sep 22, 2025 - PDF', iconData: Icons.description_outlined,
+            onActionTap: () {
+              Navigator.pushNamed(context, Routes.medicalHistoryScreen);
+            },),
+          SizedBox(width: 10.w),
+          _buildCard(
+            'Prescription',
+            'Panadol',
+            'After Eating',
+            usePillImage: true,
+            extra: '2 Pills',
+            onActionTap: () {
+              Navigator.pushNamed(context, Routes.prescriptionScreen);
+            },
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildCard(String title, String sub, String date, IconData icon, {String? extra}) {
+  Widget _buildCard(String title, String sub, String date, {IconData? iconData, bool usePillImage = false, String? extra, VoidCallback? onActionTap}) {
     bool isPrescription = title == 'Prescription';
     return Expanded(
-      child: Container(
-        padding: EdgeInsets.all(12.r),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.r),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 15, offset: const Offset(0, 8))],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(children: [
-              Icon(icon, size: 18.r, color: Colors.grey),
-              SizedBox(width: 5.w),
-              Text(title, style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.bold))
-            ]),
-            SizedBox(height: 10.h),
-            Text(sub, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold)),
-            Text(date, style: TextStyle(fontSize: 10.sp, color: Colors.grey)),
-            if (extra != null) ...[
-              SizedBox(height: 4.h),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
-                decoration: BoxDecoration(color: const Color(0xFFE8F5E9), borderRadius: BorderRadius.circular(10.r)),
-                child: Text(extra, style: TextStyle(fontSize: 10.sp, color: AppColors.mainGreen, fontWeight: FontWeight.bold)),
-              ),
-            ],
-            SizedBox(height: 15.h),
-            if (isPrescription)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildTimeSlot('9:00\nPM'),
-                  _buildTimeSlot('10:00\nAM', active: true),
-                ],
+      child: InkWell(
+        onTap: onActionTap,
+        child: Container(
+          height: 178.h,
+          padding: EdgeInsets.all(12.r),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                blurRadius: 15,
+                offset: const Offset(0, 8),
               )
-            else
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: AppColors.mainGreen),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
-                    padding: EdgeInsets.zero,
-                  ),
-                  child: Text('View', style: TextStyle(fontSize: 12.sp, color: AppColors.mainGreen)),
-                ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  if (usePillImage)
+                    Image.asset(
+                      'assets/images/pill.png',
+                      width: 24.r,
+                      height: 24.r,
+                      fit: BoxFit.contain,
+                      color: Colors.black,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Icon(Icons.medication_outlined, size: 20.r, color: Colors.grey),
+                    )
+                  else if (iconData != null)
+                    Icon(iconData, size: 20.r, color: Colors.grey),
+                  SizedBox(width: 8.w),
+                  Text(title, style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.bold))
+                ],
               ),
-          ],
+              SizedBox(height: 10.h),
+              Text(sub, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold)),
+              Text(date, style: TextStyle(fontSize: 10.sp, color: Colors.grey)),
+              if (extra != null) ...[
+                SizedBox(height: 4.h),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                  decoration: BoxDecoration(color: const Color(0xFFE8F5E9), borderRadius: BorderRadius.circular(10.r)),
+                  child: Text(extra, style: TextStyle(fontSize: 10.sp, color: AppColors.mainGreen, fontWeight: FontWeight.bold)),
+                ),
+              ],
+              const Spacer(),
+              if (isPrescription)
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Transform.translate(
+                    offset: Offset(0, -32.h),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildTimeSlot('9:00\nPM', active: true),
+                        SizedBox(height: 4.h),
+                        _buildTimeSlot('10:00\nAM', active: true),
+                      ],
+                    ),
+                  ),
+                )
+              else
+                Center(
+                  child: SizedBox(
+                    width: 80.w,
+                    height: 28.h,
+                    child: OutlinedButton(
+                      onPressed: () {},
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: AppColors.mainGreen),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                        padding: EdgeInsets.zero,
+                      ),
+                      child: Text(
+                        'View',
+                        style: TextStyle(
+                          fontSize: 11.sp,
+                          color: AppColors.mainGreen,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildTimeSlot(String time, {bool active = false}) {
-    return Container(
-      padding: EdgeInsets.all(5.r),
-      decoration: BoxDecoration(
-        color: active ? AppColors.mainGreen : const Color(0xFFE8F5E9),
-        borderRadius: BorderRadius.circular(8.r),
+    return SizedBox(
+      width: 40.w,
+      height: 28.h,
+      child: Container(
+        padding: EdgeInsets.zero,
+        decoration: BoxDecoration(
+          color: active ? AppColors.mainGreen : const Color(0xFFE8F5E9),
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        child: Center(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              time,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 8.sp,
+                color: active ? Colors.white : Colors.black87,
+                fontWeight: FontWeight.bold,
+                height: 1.0,
+              ),
+            ),
+          ),
+        ),
       ),
-      child: Text(time, textAlign: TextAlign.center, 
-        style: TextStyle(fontSize: 9.sp, color: active ? Colors.white : Colors.black87, fontWeight: FontWeight.bold)),
     );
   }
 }
@@ -225,9 +278,9 @@ class NearbyFacilities extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Text('Nearby Facilities', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
+        SectionHeader(
+          title: 'Nearby Facilities',
+          onActionTap: () {},
         ),
         SizedBox(height: 10.h),
         ListView.builder(
@@ -235,48 +288,116 @@ class NearbyFacilities extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: facilities.length,
           padding: EdgeInsets.symmetric(horizontal: 20.w),
-          itemBuilder: (context, index) => InkWell(
-            onTap: () {},
-            child: Container(
+          itemBuilder: (context, index) {
+            final List<String> facilityImages = [
+              'assets/images/hospital-01.png',
+              'assets/images/Vector.png',
+              'assets/images/assay.png',
+            ];
+
+            return Container(
               margin: EdgeInsets.only(bottom: 12.h),
-              padding: EdgeInsets.all(12.r),
               decoration: BoxDecoration(
-                color: Colors.white, 
-                borderRadius: BorderRadius.circular(16.r), 
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16.r),
                 border: Border.all(color: Colors.grey.shade100),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.02),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  )
+                ],
               ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(8.r),
-                    decoration: BoxDecoration(color: const Color(0xFFF1F8E9), borderRadius: BorderRadius.circular(12.r)),
-                    child: Icon(index == 1 ? Icons.biotech_outlined : Icons.local_hospital_outlined, color: AppColors.mainGreen),
-                  ),
-                  SizedBox(width: 15.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16.r),
+                  onTap: () {
+                    // الانتقال لصفحة تفاصيل المرفق مع تمرير المرفق الحالي كـ Model
+                    Navigator.pushNamed(
+                      context,
+                      Routes.facilityDetailsScreen,
+                      arguments: FacilityModel.fromJson(facilities[index] as Map<String, dynamic>), 
+                    );
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(12.r),
+                    child: Row(
                       children: [
-                        Text(facilities[index]['name'], style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
-                        SizedBox(height: 2.h),
-                        Row(
-                          children: [
-                            Text(facilities[index]['distance'], style: TextStyle(fontSize: 11.sp, color: Colors.grey)),
-                            SizedBox(width: 8.w),
-                            Icon(Icons.star, size: 12.r, color: Colors.amber),
-                            SizedBox(width: 2.w),
-                            Text(facilities[index]['rating'], style: TextStyle(fontSize: 11.sp, color: Colors.grey)),
-                          ],
+                        Container(
+                          padding: EdgeInsets.all(8.r),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF1F8E9),
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: Image.asset(
+                            facilityImages[index % facilityImages.length],
+                            color: AppColors.mainGreen,
+                            width: 24.r,
+                            height: 24.r,
+                            errorBuilder: (context, error, stackTrace) => Icon(
+                              Icons.local_hospital_outlined,
+                              color: AppColors.mainGreen,
+                              size: 24.r,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 15.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                facilities[index]['name'],
+                                style: TextStyle(
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(height: 2.h),
+                              Row(
+                                children: [
+                                  Text(
+                                    facilities[index]['distance'],
+                                    style: TextStyle(
+                                      fontSize: 11.sp,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  Icon(
+                                    Icons.star,
+                                    size: 12.r,
+                                    color: Colors.amber,
+                                  ),
+                                  SizedBox(width: 2.w),
+                                  Text(
+                                    facilities[index]['rating'],
+                                    style: TextStyle(
+                                      fontSize: 11.sp,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.bookmark_outline,
+                          color: Colors.grey.shade400,
+                          size: 20.r,
                         ),
                       ],
                     ),
                   ),
-                  Icon(Icons.bookmark_outline, color: Colors.grey.shade400, size: 20.r),
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ],
     );

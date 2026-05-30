@@ -4,7 +4,7 @@ import 'package:shefaa/core/routes/app_router.dart';
 import 'package:shefaa/core/routes/routes.dart';
 
 class ShefaaApp extends StatelessWidget {
-  final AppRouter appRouter; // إضافة متغير الـ Router للتحكم في التنقل
+  final AppRouter appRouter;
   const ShefaaApp({super.key, required this.appRouter});
 
   @override
@@ -17,10 +17,9 @@ class ShefaaApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Shefaa App',
-          // نستخدم الـ generateRoute لتحديد مسار التنقل بين الشاشات
           onGenerateRoute: appRouter.generateRoute,
-          // تحديد شاشة البداية للتطبيق
-          initialRoute: Routes.onboardingScreen,
+          // الشاشة الابتدائية أصبحت الآن هي الـ SplashScreen
+          initialRoute: Routes.splashScreen,
         );
       },
     );

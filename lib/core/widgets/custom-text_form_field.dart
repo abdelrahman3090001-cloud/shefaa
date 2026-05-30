@@ -30,26 +30,23 @@ class CustomTextFormField extends StatelessWidget {
         hintText: hintText,
         hintStyle: TextStyle(fontSize: 14.sp, color:AppColors.gray),
         suffixIcon: suffixIcon,
-        // شكل البوردر في الحالة العادية
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color:AppColors.gray, width: 1.4),
           borderRadius: BorderRadius.circular(44.r),
         ),
-        // شكل البوردر عند الضغط عليه
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: AppColors.mainGreen, width: 1.3),
           borderRadius: BorderRadius.circular(44.r),
         ),
-        // شكل البوردر في حالة الخطأ
         errorBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.red, width: 1.3),
+          borderSide: const BorderSide(color: AppColors.error, width: 1.3),
           borderRadius: BorderRadius.circular(16.r),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.red, width: 1.3),
+          borderSide: const BorderSide(color: AppColors.error, width: 1.3),
           borderRadius: BorderRadius.circular(16.r),
         ),
-        fillColor: const Color(0xFFEDEDED),
+        fillColor: AppColors.lightGray,
         filled: true,
       ),
     );

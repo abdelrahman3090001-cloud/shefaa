@@ -17,6 +17,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final formKey = GlobalKey<FormState>();
   bool isLoading = false;
   int selectedType = 0; // 0: Patient, 1: Guardian
+  int selectedGender =0;// 0: Male, 1: Female
   DateTime? _selectedDate;
 
   final firstNameController = TextEditingController();
@@ -86,7 +87,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               _buildUserTypeToggle(),
               SizedBox(height: 10.h),
               Text(
-                selectedType == 0 ? 'Patient' : 'Guardian',
+                selectedType == 0 ? 'Member' : 'Caregiver',
                 style: TextStyle(color: AppColors.mainGreen, fontWeight: FontWeight.bold, fontSize: 16.sp),
               ),
               Padding(
@@ -127,6 +128,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         ],
                       ),
                     ),
+                    SizedBox(height: 15.h),
+                    _buildLabel('Gender'),
+                    _buildGenderSelection(), // الجزء الجديد بتاع النوع
                     SizedBox(height: 40.h),
                     isLoading 
                       ? const Center(child: CircularProgressIndicator(color: AppColors.mainGreen))
@@ -144,7 +148,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             onTap: () => Navigator.pushNamed(context, Routes.loginScreen),
                             child: Text(
                               "Log in",
-                              style: TextStyle(color: AppColors.mainGreen, fontWeight: FontWeight.bold, fontSize: 14.sp),
+                              style: TextStyle(color: AppColors.mainGreen,
+                                  fontWeight: FontWeight.bold, fontSize: 14.sp),
                             ),
                           ),
                         ],
@@ -160,13 +165,54 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     );
   }
 
+  // ميثود اختيار النوع (Male/Female) زي الـ Figma بالظبط
+  Widget _buildGenderSelection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _genderOption('Male', 0),
+        _genderOption('Female', 1),
+      ],
+    );
+  }
+
+  Widget _genderOption(String title, int index) {
+    bool isSelected = selectedGender == index;
+    return GestureDetector(
+      onTap: () => setState(() => selectedGender = index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        width: 150.w, // عرض الزرار الواحد
+        height: 45.h,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.mainGreen : Colors.white,
+          borderRadius: BorderRadius.circular(25.r),
+          border: Border.all(
+            color: isSelected ? AppColors.mainGreen : Colors.grey.shade300,
+            width: 1,
+          ),
+        ),
+        child: Text(
+          title,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.grey,
+            fontWeight: FontWeight.bold,
+            fontSize: 14.sp,
+          ),
+        ),
+      ),
+    );
+  }
+
+
   Widget _buildUserTypeToggle() {
     return Container(
-      width: 160.w,
+      width: 160.w,height:65.h,
       padding: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
         color: const Color(0xFF1B5E20),
-        borderRadius: BorderRadius.circular(30.r),
+        borderRadius: BorderRadius.circular(25.r),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

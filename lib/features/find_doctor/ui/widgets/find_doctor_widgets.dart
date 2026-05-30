@@ -1,85 +1,97 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theming/app_colors.dart';
-import '../../../../core/widgets/custom-text_form_field.dart';
+import '../../../../core/routes/routes.dart';
 
 class DoctorSearchBar extends StatelessWidget {
-  const DoctorSearchBar({super.key});
+  final String? hint;
+  const DoctorSearchBar({super.key, this.hint});
 
   @override
   Widget build(BuildContext context) {
-    return CustomTextFormField(
-      hintText: 'Search for doctors...',
-      suffixIcon: Icon(Icons.search, color: AppColors.mainGreen, size: 24.r),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10.h),
+      child: TextFormField(
+        decoration: InputDecoration(
+          isDense: true,
+          contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+          hintText: hint ?? 'Search for specialty or doctor...',
+          hintStyle: TextStyle(fontSize: 14.sp, color: AppColors.gray),
+          prefixIcon: Icon(Icons.search, color: AppColors.gray, size: 22.r),
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+            borderRadius: BorderRadius.circular(44.r),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: AppColors.mainGreen),
+            borderRadius: BorderRadius.circular(44.r),
+          ),
+          fillColor: const Color(0xFFF5F5F5),
+          filled: true,
+        ),
+      ),
     );
   }
 }
 
-class SpecialitiesGrid extends StatelessWidget {
-  const SpecialitiesGrid({super.key});
+class SpecialitiesList extends StatelessWidget {
+  const SpecialitiesList({super.key});
 
   final List<Map<String, dynamic>> specialities = const [
-    {'name': 'Cardiology', 'icon': Icons.favorite_outline},
-    {'name': 'Dentistry', 'icon': Icons.medical_services_outlined},
-    {'name': 'Neurology', 'icon': Icons.psychology_outlined},
-    {'name': 'Ophthalmology', 'icon': Icons.visibility_outlined},
-    {'name': 'Orthopedics', 'icon': Icons.personal_video_outlined},
-    {'name': 'Pediatrics', 'icon': Icons.child_care_outlined},
-    {'name': 'Radiology', 'icon': Icons.settings_input_antenna_outlined},
-    {'name': 'Urology', 'icon': Icons.water_drop_outlined},
+    {'name': 'Dentistry', 'icon': 'assets/images/Maps4.png'},
+    {'name': 'Dermatology', 'icon': 'assets/images/Vector (Stroke).png'},
+    {'name': 'Neurology', 'icon': 'assets/images/img.png'},
+    {'name': 'Orthopedics', 'icon': 'assets/images/img_1.png'},
+    {'name': 'Cardiology and Vascular Disease', 'icon': 'assets/images/img_2.png'},
+    {'name': 'Ear, Nose, and Throat', 'icon': 'assets/images/img_3.png'},
   ];
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
+    return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: specialities.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 15.w,
-        mainAxisSpacing: 15.h,
-        childAspectRatio: 2.5,
-      ),
+      separatorBuilder: (context, index) => SizedBox(height: 12.h),
       itemBuilder: (context, index) {
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.w),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: Colors.grey.shade100),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.02),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              )
-            ],
-          ),
-          child: Row(
-            children: [
-              Container(
-                padding: EdgeInsets.all(8.r),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF1F8E9),
-                  borderRadius: BorderRadius.circular(10.r),
+        return InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, Routes.doctorSearchResultsScreen);
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                )
+              ],
+            ),
+            child: Row(
+              children: [
+                Image.asset(
+                  specialities[index]['icon'],
+                  width: 28.r,
+                  height: 28.r,
+                  fit: BoxFit.contain,
                 ),
-                child: Icon(specialities[index]['icon'], 
-                    color: AppColors.mainGreen, size: 20.r),
-              ),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: Text(
-                  specialities[index]['name'],
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.bold,
+                SizedBox(width: 15.w),
+                Expanded(
+                  child: Text(
+                    specialities[index]['name'],
+                    style: TextStyle(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87,
+                    ),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

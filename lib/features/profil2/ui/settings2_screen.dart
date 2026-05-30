@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shefaa/core/routes/routes.dart';
-import '../../../../core/theming/app_colors.dart';
-import '../../../../core/widgets/app_bottom_nav_bar.dart';
+import 'package:shefaa/core/theming/app_colors.dart';
+import 'package:shefaa/core/widgets/app_bottom_nav_bar2.dart';
 
 class Settings2Screen extends StatelessWidget {
   const Settings2Screen({super.key});
@@ -10,33 +9,58 @@ class Settings2Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF9F9F7),
+      // استخدام Container بارتفاع محدد لضمان استقرار الـ Layout
+      bottomNavigationBar: SizedBox(
+        height: 100.h,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 30.h, left: 15.w, right: 15.w),
+          child: AppBottomNavBar2(
+            currentIndex: 0, 
+            onTap: (index) {},
+          ),
+        ),
+      ),
       body: Column(
         children: [
-          // Header
+          // Header الموحد مع SafeArea لضمان الوضوح
           Container(
-            height: 110.h,
+            height: 120.h,
             width: double.infinity,
-            color: AppColors.deepGreen,
-            padding: EdgeInsets.only(top: 45.h, left: 15.w, right: 15.w),
-            child: Row(
-              children: [
-                InkWell(
-                  onTap: () => Navigator.pop(context),
-                  child: Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20.r),
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                end: Alignment.bottomCenter,
+                begin: Alignment.topCenter,
+                colors: [
+                  AppColors.NpGreen,
+                  AppColors.mainGreen,
+                ],
+              ),
+            ),
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.w),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20.r),
+                    ),
+                    const Spacer(),
+                    Text(
+                      'Settings',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Spacer(),
+                    const SizedBox(width: 40), // موازن لزر العودة
+                  ],
                 ),
-                const Spacer(),
-                Text(
-                  'Settings',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Spacer(),
-                const SizedBox(width: 20),
-              ],
+              ),
             ),
           ),
           Expanded(
@@ -53,27 +77,23 @@ class Settings2Screen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 20.h, left: 20.w, right: 20.w),
-        child: AppBottomNavBar(
-          currentIndex: 0,
-          onTap: (index) {
-            if (index == 0) {
-              Navigator.pushNamedAndRemoveUntil(context, Routes.homeScreen, (route) => false);
-            }
-          },
-        ),
-      ),
     );
   }
 
   Widget _buildSettingItem(String label, String value) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 18.h),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(44.r),
         border: Border.all(color: Colors.grey.shade300),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,8 +101,8 @@ class Settings2Screen extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.grey,
+              fontSize: 16.sp,
+              color: Colors.grey.shade600,
             ),
           ),
           Row(

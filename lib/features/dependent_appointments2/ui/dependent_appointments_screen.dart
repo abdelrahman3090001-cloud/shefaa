@@ -2,18 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shefaa/core/routes/routes.dart';
+import 'package:shefaa/core/widgets/dependent_selector_bottom_sheet.dart';
 import 'package:shefaa/features/guardian_home_screen/ui/widgets/guardian_widgets.dart';
 import '../../../../core/theming/app_colors.dart';
 import '../../../../core/widgets/app_bottom_nav_bar2.dart';
 import '../cubit/dependent_appointments_cubit.dart';
 import '../cubit/dependent_appointments_state.dart';
 
-class DependentAppointmentsScreen extends StatelessWidget {
+class DependentAppointmentsScreen extends StatefulWidget {
   const DependentAppointmentsScreen({super.key});
 
   @override
+  State<DependentAppointmentsScreen> createState() => _DependentAppointmentsScreenState();
+}
+
+class _DependentAppointmentsScreenState extends State<DependentAppointmentsScreen> {
+  // كـ Software Engineer: قمنا بإدارة حالة الشخص المختار هنا لضمان تفاعلية الصفحة بالكامل
+  String selectedDependent = 'Sara Ahmed';
+  final List<String> dependents = [
+    'Sara Ahmed',
+    'Mostafa Mohamed',
+    'Rahma Mahmoud',
+    'Karim Ahmed'
+  ];
+
+  @override
   Widget build(BuildContext context) {
-    // البيانات الوهمية حسب الصورة
+    // البيانات الوهمية للمواعيد حسب الصورة (التي سيتم جلبها لاحقاً من الـ API)
     final List<Map<String, dynamic>> appointments = [
       {
         'doctor': 'Doctor Mohamed Refaat',
@@ -56,13 +71,22 @@ class DependentAppointmentsScreen extends StatelessWidget {
         backgroundColor: const Color(0xFFFBFBFB),
         body: Column(
           children: [
-            // 1. Header مستطيل أخضر
+            // 1. Header مستطيل أخضر "Custom" ثابت كما في التصميم
             Container(
               width: double.infinity,
-              height: 120.h,
-              padding: EdgeInsets.only(top: 50.h),
-              color: AppColors.mainGreen,
-              child: Center(
+              height: 110.h,
+              padding: EdgeInsets.only(top: 40.h),
+              decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                end: Alignment.bottomCenter,
+                begin: Alignment.topCenter,
+                colors: [
+                  AppColors.NpGreen,
+                  AppColors.mainGreen,
+                ],
+              ),
+              ),
+                child: Center(
                 child: Text(
                   'Dependent Appointments',
                   style: TextStyle(
@@ -85,8 +109,23 @@ class DependentAppointmentsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 20.h),
-                        const UserSwitcher(userName: 'Sara Ahmed'),
+                        SizedBox(height: 15.h),
+                        // زر التبديل بين التابعين مربوط بالـ Bottom Sheet الموحد في الـ core
+                        UserSwitcher(
+                          userName: selectedDependent,
+                          onTap: () {
+                            DependentSelectorBottomSheet.show(
+                              context,
+                              dependents: dependents,
+                              selectedDependent: selectedDependent,
+                              onDependentSelected: (name) {
+                                setState(() {
+                                  selectedDependent = name;
+                                });
+                              },
+                            );
+                          },
+                        ),
                         SizedBox(height: 25.h),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -116,17 +155,27 @@ class DependentAppointmentsScreen extends StatelessWidget {
             ),
           ],
         ),
+        // إضافة البار الأخضر "Custom" الخاص بصفحات المراقب
         bottomNavigationBar: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             AppBottomNavBar2(
-              currentIndex: 1, // أيقونة المواعيد (الثانية)
+              currentIndex: 1, // أيقونة المواعيد (الثانية) هي المختارة
               onTap: (index) {
-                if (index == 0) Navigator.pushNamed(context, Routes.guardianHomeScreen);
-                if (index == 2) Navigator.pushNamed(context, Routes.gpsScreen);
+                switch (index) {
+                  case 0:
+                    Navigator.pushNamed(context, Routes.guardianHomeScreen);
+                    break;
+                  case 2:
+                    Navigator.pushNamed(context, Routes.gpsScreen);
+                    break;
+                  case 4:
+                    Navigator.pushNamed(context, Routes.accountScreen);
+                    break;
+                }
               },
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: 20.h), // العزل من تحت كما طلبت لضمان الشكل الجمالي
           ],
         ),
       ),
@@ -150,7 +199,7 @@ class DependentAppointmentsScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // التاريخ
+          // المربع الغامق للتاريخ
           Container(
             padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
             decoration: BoxDecoration(
@@ -165,7 +214,7 @@ class DependentAppointmentsScreen extends StatelessWidget {
             ),
           ),
           SizedBox(width: 15.w),
-          // تفاصيل الدكتور
+          // تفاصيل الموعد
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +230,7 @@ class DependentAppointmentsScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 8.h),
-                // حالة الموعد
+                // الـ Status Badge مطابق للصورة
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                   decoration: BoxDecoration(
@@ -216,3 +265,44 @@ class DependentAppointmentsScreen extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

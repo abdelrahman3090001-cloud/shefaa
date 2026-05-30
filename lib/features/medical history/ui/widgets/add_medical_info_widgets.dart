@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shefaa/core/theming/app_colors.dart';
 import 'package:shefaa/core/widgets/app_button.dart';
-import 'package:shefaa/core/widgets/custom-text_form_field.dart';
 
 class AddMedicalInfoBottomSheet extends StatefulWidget {
   const AddMedicalInfoBottomSheet({super.key});
@@ -25,23 +24,28 @@ class _AddMedicalInfoBottomSheetState extends State<AddMedicalInfoBottomSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Header with Close Icon
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Add Medical Information',
-                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: Colors.black87),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close),
+                  icon: Icon(Icons.close, color: Colors.grey, size: 24.r),
                 ),
               ],
             ),
-            SizedBox(height: 20.h),
-            _buildLabel('Blood Type'),
-            CustomTextFormField(hintText: 'e.g. O+'),
             SizedBox(height: 15.h),
+
+            // Blood Type
+            _buildLabel('Blood Type'),
+            _buildTextField('e.g. O+'),
+            SizedBox(height: 15.h),
+
+            // Weight & Height Row
             Row(
               children: [
                 Expanded(
@@ -49,7 +53,7 @@ class _AddMedicalInfoBottomSheetState extends State<AddMedicalInfoBottomSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildLabel('Weight (kg)'),
-                      CustomTextFormField(hintText: 'e.g. 80'),
+                      _buildTextField('e.g. 90'),
                     ],
                   ),
                 ),
@@ -59,24 +63,28 @@ class _AddMedicalInfoBottomSheetState extends State<AddMedicalInfoBottomSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildLabel('Height (cm)'),
-                      CustomTextFormField(hintText: 'e.g. 180'),
+                      _buildTextField('e.g. 180'),
                     ],
                   ),
                 ),
               ],
             ),
             SizedBox(height: 15.h),
+
+            // Chronic Conditions
             _buildLabel('Chronic Conditions'),
-            CustomTextFormField(hintText: 'e.g. Type 1 Diabetes'),
+            _buildTextField('e.g. Type 1 Diabetes', isLarge: true),
             SizedBox(height: 15.h),
+
+            // Allergies Row
             Row(
               children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildLabel('Allergic Drug'),
-                      CustomTextFormField(hintText: 'e.g. Penicillin'),
+                      _buildLabel('Allergies (Drug)'),
+                      _buildTextField('e.g. Penicillin'),
                     ],
                   ),
                 ),
@@ -85,20 +93,26 @@ class _AddMedicalInfoBottomSheetState extends State<AddMedicalInfoBottomSheet> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildLabel('Allergic Food'),
-                      CustomTextFormField(hintText: 'e.g. Milk'),
+                      _buildLabel('Allergies (Food)'),
+                      _buildTextField('e.g. Milk'),
                     ],
                   ),
                 ),
               ],
             ),
             SizedBox(height: 15.h),
+
+            // Insurance Provider
             _buildLabel('Insurance Provider'),
-            CustomTextFormField(hintText: 'e.g. MetLife'),
+            _buildTextField('e.g. MetLife'),
             SizedBox(height: 15.h),
+
+            // Insurance ID
             _buildLabel('Insurance ID'),
-            CustomTextFormField(hintText: 'e.g. 2938104321'),
+            _buildTextField('e.g. W987654321'),
             SizedBox(height: 30.h),
+
+            // Buttons
             Row(
               children: [
                 Expanded(
@@ -106,8 +120,8 @@ class _AddMedicalInfoBottomSheetState extends State<AddMedicalInfoBottomSheet> {
                     onPressed: () => Navigator.pop(context),
                     style: OutlinedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 15.h),
+                      side: const BorderSide(color: Color(0xFFE0E0E0)),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                      side: BorderSide(color: Colors.grey.shade300),
                     ),
                     child: Text('Cancel', style: TextStyle(color: Colors.grey, fontSize: 16.sp, fontWeight: FontWeight.bold)),
                   ),
@@ -133,7 +147,25 @@ class _AddMedicalInfoBottomSheetState extends State<AddMedicalInfoBottomSheet> {
       padding: EdgeInsets.only(bottom: 8.h),
       child: Text(
         text,
-        style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold, color: Colors.black87),
+        style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600, color: Colors.black54),
+      ),
+    );
+  }
+
+  Widget _buildTextField(String hint, {bool isLarge = false}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFFF5F5F5),
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+      child: TextFormField(
+        maxLines: isLarge ? 2 : 1,
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: TextStyle(fontSize: 13.sp, color: Colors.grey),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 12.h),
+        ),
       ),
     );
   }

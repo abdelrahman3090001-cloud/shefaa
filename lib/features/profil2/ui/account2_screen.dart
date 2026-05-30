@@ -4,6 +4,8 @@ import 'package:shefaa/core/routes/routes.dart';
 import '../../../../core/theming/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/custom-text_form_field.dart';
+import '../../../core/widgets/app_bottom_nav_bar2.dart';
+import 'widgets/delete_account_dialog.dart';
 
 class Account2Screen extends StatelessWidget {
   const Account2Screen({super.key});
@@ -18,7 +20,16 @@ class Account2Screen extends StatelessWidget {
           Container(
             height: 110.h,
             width: double.infinity,
-            color: AppColors.deepGreen,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              end: Alignment.bottomCenter,
+              begin: Alignment.topCenter,
+              colors: [
+                AppColors.NpGreen,
+                AppColors.mainGreen,
+              ],
+            ),
+          ),
             padding: EdgeInsets.only(top: 45.h, left: 15.w, right: 15.w),
             child: Row(
               children: [
@@ -107,7 +118,7 @@ class Account2Screen extends StatelessWidget {
                   SizedBox(height: 20.h),
                   Center(
                     child: InkWell(
-                      onTap: () => _showDeleteAccountDialog(context),
+                      onTap: () => showDeleteAccountDialog(context),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -131,6 +142,17 @@ class Account2Screen extends StatelessWidget {
           ),
         ],
       ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(bottom: 20.h, left: 20.w, right: 20.w),
+        child: AppBottomNavBar2(
+          currentIndex: 0, // Assuming it's part of the profile/settings tab
+          onTap: (index) {
+            if (index == 0) {
+              Navigator.pushNamedAndRemoveUntil(context, Routes.homeScreen, (route) => false);
+            }
+          },
+        ),
+      ),
     );
   }
 
@@ -143,47 +165,6 @@ class Account2Screen extends StatelessWidget {
           fontSize: 14.sp,
           fontWeight: FontWeight.bold,
           color: Colors.black87,
-        ),
-      ),
-    );
-  }
-
-  void _showDeleteAccountDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.delete_outline, color: Colors.red, size: 60.r),
-            SizedBox(height: 20.h),
-            Text(
-              'Are you sure you want to delete\nyour account?',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 30.h),
-            AppButton(
-              title: 'Yes',
-              onTap: () => Navigator.pop(context),
-            ),
-            SizedBox(height: 10.h),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                'Cancel',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );

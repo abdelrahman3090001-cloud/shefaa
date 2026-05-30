@@ -67,7 +67,7 @@ class _CreateAccountPatientScreenState extends State<CreateAccountPatientScreen>
                       padding: EdgeInsets.all(12.r),
                       decoration: BoxDecoration(
                         border: Border.all(color: AppColors.mainGreen),
-                        borderRadius: BorderRadius.circular(16.r),
+                        borderRadius: BorderRadius.circular(20.r),
                       ),
                       child: Icon(
                         Icons.person_outline,
@@ -77,7 +77,7 @@ class _CreateAccountPatientScreenState extends State<CreateAccountPatientScreen>
                     ),
                     SizedBox(height: 8.h),
                     Text(
-                      'Patient',
+                      ' Member',
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,

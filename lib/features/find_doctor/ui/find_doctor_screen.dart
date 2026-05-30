@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shefaa/core/routes/routes.dart';
 import '../../../../core/theming/app_colors.dart';
-import '../../../../core/widgets/app_header.dart';
 import '../../../../core/widgets/app_bottom_nav_bar.dart';
 import 'widgets/find_doctor_widgets.dart';
 
@@ -15,58 +14,63 @@ class FindDoctorScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFFBFBFB),
       body: Column(
         children: [
-          AppHeader(
-            child: Stack(
-              children: [
-                Positioned(
-                  top: 50.h,
-                  left: 20.w,
-                  child: InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      padding: EdgeInsets.all(8.r),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                      child: Icon(Icons.arrow_back_ios_new,
-                          color: Colors.white, size: 20.r),
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 50.h),
-                    child: Text(
-                      'Find Doctors',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+          Container(
+            height: 110.h,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+              colors: [
+                AppColors.mainGreen, // الفاتح
+                AppColors.deepGreen, // الغامق
               ],
+              begin: Alignment.bottomCenter, // البداية من تحت (الفاتح تحت)
+              end: Alignment.topCenter,    // النهاية فوق (الغامق فوق)
+            )
+
             ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            child: Padding(
+              padding: EdgeInsets.only(top: 45.h, left: 15.w, right: 15.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const DoctorSearchBar(),
-                  SizedBox(height: 25.h),
+                  // مساحة فارغة لموازنة الهيدر وتوسيط العنوان
+                  SizedBox(width: 28.r),
                   Text(
-                    'Top Specialities',
+                    'Find Doctors',
                     style: TextStyle(
+                      color: Colors.white,
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, Routes.bookmarkedDoctorsScreen);
+                    },
+                    child: Icon(Icons.bookmark_border, color: Colors.white, size: 28.r),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const DoctorSearchBar(),
                   SizedBox(height: 15.h),
-                  const SpecialitiesGrid(),
+                  Text(
+                    'Most Popular Specialties',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  SizedBox(height: 15.h),
+                  const SpecialitiesList(),
                 ],
               ),
             ),

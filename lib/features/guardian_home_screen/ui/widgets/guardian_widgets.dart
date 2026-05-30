@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/widgets/app_header.dart';
+import '../../../../core/widgets/dependent_selector_bottom_sheet.dart';
 import '../../../../core/theming/app_colors.dart';
 import '../../../../gen/assets.gen.dart';
 
@@ -67,24 +68,30 @@ class GuardianHeader extends StatelessWidget {
 
 class UserSwitcher extends StatelessWidget {
   final String userName;
-  const UserSwitcher({super.key, required this.userName});
+  final VoidCallback? onTap;
+
+  const UserSwitcher({super.key, required this.userName, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.swap_horiz, color: Colors.grey, size: 20.r),
-            SizedBox(width: 8.w),
-            Text(userName, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold)),
-          ],
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12.r),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey.shade300),
+            borderRadius: BorderRadius.circular(12.r),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.swap_horiz, color: Colors.grey, size: 20.r),
+              SizedBox(width: 8.w),
+              Text(userName, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold)),
+            ],
+          ),
         ),
       ),
     );

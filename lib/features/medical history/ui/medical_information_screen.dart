@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shefaa/core/routes/routes.dart';
 import 'package:shefaa/core/theming/app_colors.dart';
+import 'package:shefaa/core/widgets/app_bottom_nav_bar.dart';
 import '../cubit/medical_history_cubit.dart';
 import '../cubit/medical_history_state.dart';
 import 'widgets/add_medical_info_widgets.dart';
@@ -11,30 +13,43 @@ class MedicalInformationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: context.read<MedicalHistoryCubit>(),
+    return BlocProvider(
+      create: (context) => MedicalHistoryCubit()..getMedicalHistory(),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFFBFBFB),
         body: Column(
           children: [
             // 1. Header
             Container(
               height: 110.h,
               width: double.infinity,
-              color: AppColors.deepGreen,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.mainGreen,
+                    AppColors.deepGreen,
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
+              ),
               padding: EdgeInsets.only(top: 45.h, left: 15.w, right: 15.w),
               child: Row(
                 children: [
                   InkWell(
                     onTap: () => Navigator.pop(context),
-                    child: Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20.r),
+                    child: Icon(Icons.arrow_back_ios_new,
+                        color: Colors.white, size: 20.r),
                   ),
-                  const Spacer(flex: 2),
+                  const Spacer(),
                   Text(
-                    'Medical Information',
-                    style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold),
+                    'Medical History',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold),
                   ),
-                  const Spacer(flex: 2),
+                  const Spacer(),
                   InkWell(
                     onTap: () => showAddMedicalInfoBottomSheet(context),
                     child: Icon(Icons.add, color: Colors.white, size: 24.r),
@@ -42,97 +57,129 @@ class MedicalInformationScreen extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             Expanded(
               child: BlocBuilder<MedicalHistoryCubit, MedicalHistoryState>(
                 builder: (context, state) {
-                  if (state is MedicalHistorySuccess && state.info != null) {
+                  if (state is MedicalHistoryLoading) {
+                    return const Center(child: CircularProgressIndicator(color: AppColors.mainGreen));
+                  } else if (state is MedicalHistorySuccess && state.info != null) {
                     final info = state.info!;
                     return SingleChildScrollView(
                       padding: EdgeInsets.all(20.r),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildSectionTitle('Basic Information'),
-                          _buildInfoRow('Full Name', info.fullName),
-                          _buildInfoRow('Date of Birth', info.dob),
-                          _buildInfoRow('Phone Number', info.phone),
-                          _buildInfoRow('Blood Type', info.bloodType),
+                          Text(
+                            'Medical Information',
+                            style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87),
+                          ),
+                          SizedBox(height: 15.h),
                           
-                          SizedBox(height: 25.h),
-                          _buildSectionTitle('Weight & Height'),
                           Row(
                             children: [
-                              Expanded(child: _buildInfoRow('Weight', info.weight)),
-                              SizedBox(width: 20.w),
-                              Expanded(child: _buildInfoRow('Height', info.height)),
+                              Expanded(child: _buildInfoCard('Name', info.fullName)),
+                              SizedBox(width: 15.w),
+                              Expanded(child: _buildInfoCard('Date of Birth', info.dob)),
                             ],
                           ),
-                          
-                          SizedBox(height: 25.h),
-                          _buildSectionTitle('Chronic Conditions'),
-                          _buildBulletList(info.chronicConditions),
-                          
-                          SizedBox(height: 25.h),
-                          _buildSectionTitle('Insurance'),
-                          _buildInfoRow('Insurance Provider', info.insuranceProvider),
-                          _buildInfoRow('Insurance ID', info.insuranceId),
-                          
-                          SizedBox(height: 25.h),
-                          _buildSectionTitle('Allergies'),
-                          _buildBulletList(info.allergies),
+                          SizedBox(height: 15.h),
+
+                          Row(
+                            children: [
+                              Expanded(child: _buildInfoCard('Phone Number', info.phone)),
+                              SizedBox(width: 15.w),
+                              Expanded(child: _buildInfoCard('Blood Type', info.bloodType)),
+                            ],
+                          ),
+                          SizedBox(height: 15.h),
+
+                          _buildInfoCard('Weight & Height', '${info.weight} - ${info.height}'),
+                          SizedBox(height: 15.h),
+
+                          _buildInfoCard('Chronic Conditions', info.chronicConditions.join(' - ')),
+                          SizedBox(height: 15.h),
+
+                          _buildInfoCard(
+                            'Insurance ID',
+                            'Insurance Provider: ${info.insuranceProvider}\n\n${info.insuranceId}',
+                          ),
+                          SizedBox(height: 15.h),
+
+                          _buildInfoCard(
+                            'Allergies',
+                            info.allergies.join('\n'),
+                          ),
+                          SizedBox(height: 20.h),
                         ],
                       ),
                     );
+                  } else if (state is MedicalHistoryError) {
+                    return Center(child: Text(state.error));
                   }
-                  return const Center(child: CircularProgressIndicator(color: AppColors.mainGreen));
+                  return const SizedBox.shrink();
                 },
               ),
             ),
           ],
         ),
+        bottomNavigationBar: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppBottomNavBar(
+              currentIndex: 4,
+              onTap: (index) {
+                if (index == 0) {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, Routes.homeScreen, (route) => false);
+                }
+              },
+            ),
+            SizedBox(height: 20.h),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 12.h),
-      child: Text(
-        title,
-        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: AppColors.mainGreen),
+  Widget _buildInfoCard(String label, String value) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(12.r),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          )
+        ],
       ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 15.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
-          SizedBox(height: 4.h),
-          Text(value, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: Colors.black87)),
-          Divider(color: Colors.grey.shade200),
+          Text(
+            label,
+            style: TextStyle(
+                fontSize: 12.sp,
+                color: Colors.grey.shade400,
+                fontWeight: FontWeight.w500),
+          ),
+          SizedBox(height: 6.h),
+          Text(
+            value,
+            style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87),
+          ),
         ],
       ),
-    );
-  }
-
-  Widget _buildBulletList(List<String> items) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: items.map((item) => Padding(
-        padding: EdgeInsets.only(bottom: 8.h),
-        child: Row(
-          children: [
-            Container(width: 6.r, height: 6.r, decoration: const BoxDecoration(color: AppColors.mainGreen, shape: BoxShape.circle)),
-            SizedBox(width: 10.w),
-            Text(item, style: TextStyle(fontSize: 14.sp, color: Colors.black87)),
-          ],
-        ),
-      )).toList(),
     );
   }
 }

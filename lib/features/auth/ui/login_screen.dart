@@ -5,7 +5,6 @@ import 'package:shefaa/core/theming/app_colors.dart';
 import 'package:shefaa/core/widgets/app_button.dart';
 import 'package:shefaa/core/widgets/app_header.dart';
 import 'package:shefaa/core/widgets/custom-text_form_field.dart';
-import 'sign_up/create_account_screen.dart'; 
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  int selectedType = 0; // 0: Member, 1: Caregiver
   bool isObscureText = true;
   bool isLoading = false;
 
@@ -27,8 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
         isLoading = true;
       });
 
-      // محاكاة الاتصال بالسيرفر
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
 
       setState(() {
         isLoading = false;
@@ -36,24 +35,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!mounted) return;
 
-      if (emailController.text == 'admin@shefaa.com' && passwordController.text == '123456') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login Success! Welcome Back'), backgroundColor: AppColors.mainGreen),
-        );
-        // التوجيه للصفحة الرئيسية (Home)
-        Navigator.pushNamedAndRemoveUntil(context, Routes.homeScreen, (route) => false);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid Email or Password!'), backgroundColor: Colors.red),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login Success! Welcome Back'),
+          backgroundColor: AppColors.mainGreen,
+        ),
+      );
+
+      Navigator.pushNamedAndRemoveUntil(context, Routes.homeScreen, (route) => false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SingleChildScrollView(
         child: Form(
           key: formKey,
@@ -63,10 +59,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text(
                   'Log in',
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 50.sp,
+                    color: AppColors.white,
+                    fontSize: 40.sp,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+              ),
+              SizedBox(height: 20.h),
+              _buildUserTypeToggle(),
+              SizedBox(height: 10.h),
+              Text(
+                selectedType == 0 ? 'Member' : 'Caregiver',
+                style: TextStyle(
+                  color: AppColors.mainGreen,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp,
                 ),
               ),
               SizedBox(height: 30.h),
@@ -81,13 +88,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: emailController,
                       hintText: 'Enter your Email Address',
                       validator: (value) {
-                        if (value == null || value.isEmpty || !value.contains('@')) {
-                          return 'Please enter a valid email';
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
                         }
                         return null;
                       },
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 15.h),
                     Text('Password', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
                     SizedBox(height: 10.h),
                     CustomTextFormField(
@@ -104,35 +111,36 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty || value.length < 6) {
-                          return 'Password must be at least 6 characters';
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
                         }
                         return null;
                       },
                     ),
+                    SizedBox(height: 10.h),
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, Routes.forgetPassword);
                         },
-                        child: Text('Forgot password?', style: TextStyle(color: Colors.grey, fontSize: 14.sp)),
+                        child: Text('Forgot password?', style: TextStyle(color: AppColors.gray, fontSize: 14.sp)),
                       ),
                     ),
-                    SizedBox(height: 30.h),
-                    isLoading 
-                      ? const Center(child: CircularProgressIndicator(color: AppColors.mainGreen))
-                      : AppButton(
-                          title: 'Log In',
-                          onTap: _mockLogin,
-                        ),
+                    SizedBox(height: 20.h),
+                    isLoading
+                        ? const Center(child: CircularProgressIndicator(color: AppColors.NpGreen))
+                        : AppButton(
+                            title: 'Log In',
+                            onTap: _mockLogin,
+                          ),
                     SizedBox(height: 30.h),
                     Row(
                       children: [
                         const Expanded(child: Divider()),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10.w),
-                          child: Text('Or continue with', style: TextStyle(color: Colors.grey, fontSize: 14.sp)),
+                          child: Text('Or continue with', style: TextStyle(color: AppColors.gray, fontSize: 14.sp)),
                         ),
                         const Expanded(child: Divider()),
                       ],
@@ -164,12 +172,49 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
+                    SizedBox(height: 15.h),
                   ],
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildUserTypeToggle() {
+    // كـ Software Engineer: قمنا بتقليل الـ padding الرأسي (vertical) ليرجع الحجم نحيفاً كما كان في البداية
+    // مع الحفاظ على عرض مناسب (width) يعطي شكلاً مستطيلاً منسقاً.
+    return Container(
+      width: 160.w,height:65,
+      // عرض معتدل ليكون مستطيل واضح
+      padding: EdgeInsets.all(4.w),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1B5E20),
+        borderRadius: BorderRadius.circular(25.r),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(2, (index) {
+          bool isSelected = selectedType == index;
+          return GestureDetector(
+            onTap: () => setState(() => selectedType = index),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 15.h), // تقليل الـ vertical padding لتصغير الارتفاع
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.white : Colors.transparent,
+                borderRadius: BorderRadius.circular(25.r),
+              ),
+              child: Image.asset(
+                index == 0 ? 'assets/images/User-4.png' : 'assets/images/Users-4.png',
+                height: 25.h, // تقليل حجم الأيقونة قليلاً لتناسب المستطيل النحيف
+                width:25.w,
+                color: isSelected ? const Color(0xFF1B5E20) : Colors.white,
+              ),
+            ),
+          );
+        }),
       ),
     );
   }

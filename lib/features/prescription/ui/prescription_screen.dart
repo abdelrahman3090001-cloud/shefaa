@@ -7,6 +7,7 @@ import '../../../../core/routes/routes.dart';
 import '../cubit/prescription_cubit.dart';
 import '../cubit/prescription_state.dart';
 import '../data/models/prescription_model.dart';
+import 'add_prescription_screen.dart';
 
 class PrescriptionScreen extends StatelessWidget {
   const PrescriptionScreen({super.key});
@@ -23,7 +24,16 @@ class PrescriptionScreen extends StatelessWidget {
             Container(
               height: 110.h,
               width: double.infinity,
-              color: AppColors.deepGreen,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.mainGreen,
+                    AppColors.NpGreen,
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
+              ),
               padding: EdgeInsets.only(top: 45.h, left: 20.w, right: 20.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,7 +46,12 @@ class PrescriptionScreen extends StatelessWidget {
                         fontSize: 20.sp,
                         fontWeight: FontWeight.bold),
                   ),
-                  Icon(Icons.add, color: Colors.white, size: 28.r),
+                  InkWell(
+                    onTap: () {
+                      showAddPrescriptionBottomSheet(context);
+                    },
+                    child: Icon(Icons.add, color: Colors.white, size: 28.r),
+                  ),
                 ],
               ),
             ),
@@ -63,6 +78,9 @@ class PrescriptionScreen extends StatelessWidget {
                                 child: CircularProgressIndicator(
                                     color: AppColors.mainGreen));
                           } else if (state is PrescriptionSuccess) {
+                            if (state.prescriptions.isEmpty) {
+                              return const Center(child: Text('No prescriptions found.'));
+                            }
                             return ListView.separated(
                               itemCount: state.prescriptions.length,
                               separatorBuilder: (context, index) =>
@@ -72,6 +90,8 @@ class PrescriptionScreen extends StatelessWidget {
                                     context, state.prescriptions[index], index);
                               },
                             );
+                          } else if (state is PrescriptionError) {
+                            return Center(child: Text(state.error));
                           }
                           return const SizedBox.shrink();
                         },
@@ -126,7 +146,7 @@ class PrescriptionScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withOpacity(0.03),
+                color: Colors.black.withOpacity(0.04),
                 blurRadius: 10,
                 offset: const Offset(0, 4))
           ],
@@ -168,7 +188,7 @@ class PrescriptionScreen extends StatelessWidget {
                       Container(
                         height: 4.h,
                         width: (prescription.currentDay / prescription.totalDays) *
-                            150.w,
+                            180.w,
                         decoration: BoxDecoration(
                             color: AppColors.mainGreen,
                             borderRadius: BorderRadius.circular(2.r)),
@@ -181,6 +201,7 @@ class PrescriptionScreen extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(width: 10.w),
             Column(
               children: prescription.times.map((time) => _buildTimeSlot(time)).toList(),
             ),
@@ -204,7 +225,7 @@ class PrescriptionScreen extends StatelessWidget {
   Widget _buildTimeSlot(String time) {
     return Container(
       margin: EdgeInsets.only(bottom: 8.h),
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
       decoration: BoxDecoration(
         color: AppColors.deepGreen,
         borderRadius: BorderRadius.circular(8.r),
@@ -213,7 +234,7 @@ class PrescriptionScreen extends StatelessWidget {
         time.replaceAll(' ', '\n'),
         textAlign: TextAlign.center,
         style: TextStyle(
-            color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.bold),
+            color: Colors.white, fontSize: 9.sp, fontWeight: FontWeight.bold),
       ),
     );
   }

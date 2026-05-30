@@ -14,9 +14,7 @@ class GuardianHomeLoading extends GuardianHomeState {
 }
 
 class GuardianHomeSuccess extends GuardianHomeState {
-  final List<dynamic> appointments;
-  final dynamic locationData;
-  const GuardianHomeSuccess({required this.appointments, this.locationData});
+  const GuardianHomeSuccess();
 }
 
 class GuardianHomeError extends GuardianHomeState {

@@ -16,6 +16,7 @@ class DependentSelectorBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // كـ Software Engineer: قمنا بجعل الـ Bottom Sheet مرناً (MainAxisSize.min) ليأخذ مساحة المحتوى فقط
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       decoration: BoxDecoration(
@@ -26,6 +27,7 @@ class DependentSelectorBottomSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // مؤشر السحب العلوي (Handle)
           Center(
             child: Container(
               width: 50.w,
@@ -46,6 +48,7 @@ class DependentSelectorBottomSheet extends StatelessWidget {
             ),
           ),
           SizedBox(height: 15.h),
+          // قائمة الأسماء
           Flexible(
             child: ListView.builder(
               shrinkWrap: true,
@@ -61,7 +64,7 @@ class DependentSelectorBottomSheet extends StatelessWidget {
                   contentPadding: EdgeInsets.zero,
                   leading: isSelected
                       ? Icon(Icons.check, color: AppColors.mainGreen, size: 20.r)
-                      : SizedBox(width: 20.r),
+                      : SizedBox(width: 20.r), // مساحة فارغة للحفاظ على المحاذاة
                   title: Text(
                     dependent,
                     style: TextStyle(
@@ -80,6 +83,7 @@ class DependentSelectorBottomSheet extends StatelessWidget {
     );
   }
 
+  // دالة مساعدة لتسهيل استدعاء الـ Bottom Sheet من أي مكان
   static void show(
     BuildContext context, {
     required List<String> dependents,

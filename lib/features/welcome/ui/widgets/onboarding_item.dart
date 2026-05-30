@@ -15,41 +15,50 @@ class OnboardingItem extends StatelessWidget {
         Stack(
           alignment: Alignment.center,
           children: [
-            // الجزء الأخضر العلوي (القبة) باستخدام ClipPath للحصول على شكل احترافي
+            // الجزء الأخضر العلوي (القبة)
             ClipPath(
               clipper: HeaderClipper(),
               child: Container(
                 height: 280.h,
                 width: double.infinity,
-                color: AppColors.mainGreen,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [
+                        AppColors.deepGreen,
+                        AppColors.mainGreen,
+                      ],
+                    end: Alignment.bottomCenter,
+                    begin: Alignment.topCenter,    // البداية من أعلى المنتصف
+                  )
+                )
               ),
             ),
-            // عرض الصورة بناءً على عنوان الصفحة (Patient, Guardian, Doctor)
-            if (model.title == 'Doctor' || model.title == 'Patient' || model.title == 'Guardian')
+            // عرض الصورة بناءً على المسميات الجديدة (Member, Caregiver)
+            if (model.title == 'Member' || model.title == 'Caregiver' || model.title == 'Doctor' || model.title == 'Patient' || model.title == 'Guardian')
               Positioned(
-                top: 90.h,
-                left: 35.w,
+                top: 80.h,
+                left: 30.w,
                 child: Image.asset(
-                  model.title == 'Doctor'
-                      ? 'assets/images/Doctor.png'
-                      : model.title == 'Guardian'
-                          ? 'assets/images/Users-4.png' // الصورة الجديدة للمرافق
-                          : 'assets/images/User-4.png', // صورة المريض
-                  height: 110.h,
-                  width: 130.w,
-                  color: Colors.white, // تلوينها بالأبيض لتتناسق مع التصميم
+                  (model.title == 'Caregiver' || model.title == 'Guardian')
+                      ? 'assets/images/Users-4.png' // صورة المرافق
+                      : (model.title == 'Member' || model.title == 'Patient')
+                          ? 'assets/images/User-4.png' // صورة المريض
+                          : 'assets/images/Doctor.png', // صورة الطبيب
+                  height: 100.h,
+                  width: 100.w,
+                  color: Colors.white,
                   errorBuilder: (context, error, stackTrace) => const SizedBox(),
                 ),
               ),
-            // العنوان (يتم تعديل مكانه تلقائياً إذا وجدت الصورة)
+            // العنوان
             Positioned(
-              top: (model.title == 'Doctor' || model.title == 'Patient' || model.title == 'Guardian') ? 140.h : 130.h,
+              top: 120.h,
               right: 75.w,
               child: Text(
                 model.title,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 38.sp,
+                  fontSize: 35.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -58,11 +67,9 @@ class OnboardingItem extends StatelessWidget {
         ),
         SizedBox(height: 60.h),
         Padding(
-          // تقليل الـ horizontal padding لضمان ظهور النص في سطر واحد قدر الإمكان
           padding: EdgeInsets.symmetric(horizontal: 10.w),
           child: Column(
             children: [
-              // نص الوصف التعريفي
               Text(
                 model.description,
                 textAlign: TextAlign.center,
@@ -73,7 +80,6 @@ class OnboardingItem extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 40.h),
-              // عرض نقاط الشرح (Bullet Points)
               ...model.bulletPoints.map((point) => _buildBulletPoint(point)),
             ],
           ),
@@ -82,7 +88,6 @@ class OnboardingItem extends StatelessWidget {
     );
   }
 
-  // ويدجيت لبناء النقطة الخضراء وجنبها النص
   Widget _buildBulletPoint(String text) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 40.w),
@@ -109,17 +114,16 @@ class OnboardingItem extends StatelessWidget {
     );
   }
 }
+
 class HeaderClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = Path();
-    // يبدأ من أعلى اليسار وينزل لقبل نهاية الارتفاع بـ 40 بكسل
     path.lineTo(0, size.height - 40.h);
-    // رسم القوس الاحترافي
     path.quadraticBezierTo(
-      size.width / 2,     // نقطة التحكم في المنتصف بالعرض
-      size.height + 15.h, // دفع القوس لأسفل ليعطي شكل انسيابي
-      size.width,         // نقطة الوصول لليمين
+      size.width / 2,
+      size.height + 15.h,
+      size.width,
       size.height - 40.h,
     );
     path.lineTo(size.width, 0);

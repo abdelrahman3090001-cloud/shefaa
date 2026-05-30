@@ -38,7 +38,16 @@ class _RealTimeLocation2ScreenState extends State<RealTimeLocation2Screen> {
               width: double.infinity,
               height: 110.h,
               padding: EdgeInsets.only(top: 40.h),
-              color: AppColors.mainGreen,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              end: Alignment.bottomCenter,
+              begin: Alignment.topCenter,
+              colors: [
+                AppColors.NpGreen,
+                AppColors.mainGreen,
+              ],
+            ),
+          ),
               child: Center(
                 child: Text(
                   'Real-Time Location',

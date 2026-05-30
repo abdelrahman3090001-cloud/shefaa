@@ -43,12 +43,15 @@ class GuardianProfileDrawer extends StatelessWidget {
             ],
           ),
           SizedBox(height: 30.h),
-          _buildMenuItem(Icons.person_outline, 'Account', () => Navigator.pushNamed(context, Routes.accountScreen)),
-          _buildMenuItem(Icons.settings_outlined, 'Settings', () => Navigator.pushNamed(context, Routes.settingsScreen)),
+          _buildMenuItem(Icons.person_outline, 'Account', () => Navigator.pushNamed(context, Routes.account2Screen)),
+          // تم التعديل هنا لفتح Settings2Screen بدلاً من الصفحة القديمة
+          _buildMenuItem(Icons.settings_outlined, 'Settings', () => Navigator.pushNamed(context, Routes.settings2Screen)),
           _buildMenuItem(Icons.person_search_outlined, 'Switch to Member', () {
             Navigator.pushNamedAndRemoveUntil(context, Routes.homeScreen, (route) => false);
           }),
-          _buildMenuItem(Icons.group_outlined, 'My Dependents', () {}),
+          _buildMenuItem(Icons.group_outlined, 'My Dependents', () {
+            Navigator.pushNamed(context, Routes.myDependentsScreen);
+          }),
           const Spacer(),
           // Logout
           Padding(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shefaa/core/routes/routes.dart';
+import 'package:shefaa/core/widgets/app_bottom_nav_bar2.dart';
 import '../../../../core/theming/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_bottom_nav_bar.dart';
@@ -24,9 +25,18 @@ class MyDependentsScreen extends StatelessWidget {
         children: [
           // Header
           Container(
-            height: 110.h,
-            width: double.infinity,
-            color: AppColors.deepGreen,
+              height: 110.h,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  end: Alignment.bottomCenter,
+                  begin: Alignment.topCenter,
+                  colors: [
+                    AppColors.NpGreen,
+                    AppColors.mainGreen,
+                  ],
+            ),
+          ),
             padding: EdgeInsets.only(top: 45.h, left: 15.w, right: 15.w),
             child: Row(
               children: [
@@ -55,7 +65,7 @@ class MyDependentsScreen extends StatelessWidget {
               separatorBuilder: (context, index) => SizedBox(height: 15.h),
               itemBuilder: (context, index) {
                 return Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 17.h),
                   decoration: BoxDecoration(
                     color: const Color(0xFFF5F5F5),
                     borderRadius: BorderRadius.circular(12.r),
@@ -66,7 +76,7 @@ class MyDependentsScreen extends StatelessWidget {
                       Text(
                         dependents[index],
                         style: TextStyle(
-                          fontSize: 14.sp,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w500,
                           color: Colors.black87,
                         ),
@@ -93,7 +103,7 @@ class MyDependentsScreen extends StatelessWidget {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(bottom: 20.h, left: 20.w, right: 20.w),
-        child: AppBottomNavBar(
+        child: AppBottomNavBar2(
           currentIndex: 0,
           onTap: (index) {
             if (index == 0) {

@@ -47,8 +47,17 @@ class _DependentMedicalHistory2ScreenState extends State<DependentMedicalHistory
               width: double.infinity,
               height: 110.h,
               padding: EdgeInsets.only(top: 40.h),
-              color: AppColors.mainGreen,
-              child: Center(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              end: Alignment.bottomCenter,
+              begin: Alignment.topCenter,
+              colors: [
+                AppColors.NpGreen,
+                AppColors.mainGreen,
+              ],
+            ),
+          ),
+             child: Center(
                 child: Text(
                   'Dependent Medical History',
                   style: TextStyle(

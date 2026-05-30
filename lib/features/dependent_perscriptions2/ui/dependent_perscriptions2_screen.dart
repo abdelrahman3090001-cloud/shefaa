@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shefaa/core/routes/routes.dart';
 import 'package:shefaa/core/widgets/dependent_selector_bottom_sheet.dart';
+import 'package:shefaa/features/dependent_perscriptions2/ui/widgets/add_prescription_bottom_sheet.dart';
 import 'package:shefaa/features/guardian_home_screen/ui/widgets/guardian_widgets.dart';
 import '../../../../core/theming/app_colors.dart';
 import '../../../../core/widgets/app_bottom_nav_bar2.dart';
@@ -56,7 +57,16 @@ class _DependentPrescriptions2ScreenState extends State<DependentPrescriptions2S
               width: double.infinity,
               height: 110.h,
               padding: EdgeInsets.only(top: 40.h, left: 20.w, right: 20.w),
-              color: AppColors.mainGreen,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              end: Alignment.bottomCenter,
+              begin: Alignment.topCenter,
+              colors: [
+                AppColors.NpGreen,
+                AppColors.mainGreen,
+              ],
+            ),
+          ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -69,7 +79,10 @@ class _DependentPrescriptions2ScreenState extends State<DependentPrescriptions2S
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Icon(Icons.add, color: Colors.white, size: 28.r),
+                  InkWell(
+                    onTap: () => AddPrescriptionBottomSheet.show(context),
+                    child: Icon(Icons.add, color: Colors.white, size: 28.r),
+                  ),
                 ],
               ),
             ),

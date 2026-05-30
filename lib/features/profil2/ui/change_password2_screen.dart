@@ -4,7 +4,7 @@ import 'package:shefaa/core/routes/routes.dart';
 import '../../../../core/theming/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/custom-text_form_field.dart';
-import '../../../../core/widgets/app_bottom_nav_bar.dart';
+import '../../../../core/widgets/app_bottom_nav_bar2.dart';
 
 class ChangePassword2Screen extends StatefulWidget {
   const ChangePassword2Screen({super.key});
@@ -26,8 +26,17 @@ class _ChangePassword2ScreenState extends State<ChangePassword2Screen> {
           // Header
           Container(
             height: 110.h,
-            width: double.infinity,
-            color: AppColors.deepGreen,
+            width: 393.r,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              end: Alignment.bottomCenter,
+              begin: Alignment.topCenter,
+              colors: [
+                AppColors.NpGreen,
+                AppColors.mainGreen,
+              ],
+            ),
+          ),
             padding: EdgeInsets.only(top: 45.h, left: 15.w, right: 15.w),
             child: Row(
               children: [
@@ -103,7 +112,7 @@ class _ChangePassword2ScreenState extends State<ChangePassword2Screen> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(bottom: 20.h, left: 20.w, right: 20.w),
-        child: AppBottomNavBar(
+        child: AppBottomNavBar2(
           currentIndex: 0, // Assuming it's part of the profile/settings tab
           onTap: (index) {
             if (index == 0) {
